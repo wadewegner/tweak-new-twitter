@@ -249,7 +249,9 @@
       </section>
     </section>
     <section class="group">
-      <label>Experiments</label>
+      <label>
+        <span id="experiments">Experiments<small id="debugCountdown"></small></span>
+      </label>
       <section class="checkbox">
         <label>
           Hide metrics
@@ -299,6 +301,21 @@
             </select>
           </label>
         </section>
+      </section>
+    </section>
+    <section class="group debug">
+      <label>Debug settings</label>
+      <section class="checkbox">
+        <label>
+          Enable debug logging
+          <input type="checkbox" name="enableDebugLogging">
+        </label>
+      </section>
+      <section>
+        <label>
+          Export configuration for bug report
+          <input type="button" value="Export" id="export-config">
+        </label>
       </section>
     </section>
   </form>

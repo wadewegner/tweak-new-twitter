@@ -8,8 +8,14 @@ body, html {
 body.mobile .desktop,
 body.desktop .mobile,
 body:not(.home) .home,
+body:not(.debug) .debug,
 body:not(.disabledHomeTimeline) .disabledHomeTimeline {
   display: none;
+}
+
+#experiments.clickable {
+  cursor: pointer;
+  user-select: none;
 }
 
 label {

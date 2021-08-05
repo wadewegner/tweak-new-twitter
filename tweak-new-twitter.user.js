@@ -7,7 +7,7 @@
 // @version     37
 // ==/UserScript==
 
-const enableDebugLogging = false
+let enableDebugLogging = false
 
 const mobile = navigator.userAgent.includes('Android')
 const desktop = !mobile
@@ -2098,10 +2098,20 @@ if (typeof GM == 'undefined' &&
     typeof chrome.storage != 'undefined') {
   chrome.storage.local.get((storedConfig) => {
     Object.assign(config, storedConfig)
+    if (config.enableDebugLogging) {
+      enableDebugLogging = true
+    }
     main()
   })
 
   chrome.storage.onChanged.addListener((changes) => {
+    if ('enableDebugLogging' in changes) {
+      log('disabling debug logging')
+      enableDebugLogging = changes.enableDebugLogging.newValue
+      log('enabled debug logging')
+      return
+    }
+
     let configChanges = Object.fromEntries(
       Object.entries(changes).map(([key, {newValue}]) => [key, newValue])
     )

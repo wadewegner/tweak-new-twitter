@@ -94,6 +94,14 @@ chrome.storage.local.get((storedConfig) => {
 
   let $form = document.querySelector('form')
 
+  function exportConfig() {
+    let $a = document.createElement('a')
+    $a.download = 'tweak-new-twitter.config.txt'
+    $a.href = URL.createObjectURL(new Blob([JSON.stringify(optionsConfig, null, 2)], {type: 'text/plain'}))
+    $a.click()
+    URL.revokeObjectURL($a.href)
+  }
+
   function updateCheckboxGroups() {
     for (let [group, checkboxNames] of checkboxGroups.entries()) {
       let checkedCount = checkboxNames.filter(name => optionsConfig[name]).length
@@ -115,6 +123,7 @@ chrome.storage.local.get((storedConfig) => {
 
   document.body.classList.toggle('disabledHomeTimeline', optionsConfig.disableHomeTimeline)
   document.body.classList.toggle('home', !optionsConfig.alwaysUseLatestTweets)
+  document.body.classList.toggle('debug', optionsConfig.enableDebugLogging === true)
 
   updateCheckboxGroups()
 
@@ -143,6 +152,33 @@ chrome.storage.local.get((storedConfig) => {
 
     chrome.storage.local.set(changedConfig)
   })
-})
 
+  document.querySelector('#export-config').addEventListener('click', exportConfig)
+
+  if (!optionsConfig.enableDebugLogging) {
+    let $experiments = document.querySelector('#experiments')
+    let $debugCountdown = document.querySelector('#debugCountdown')
+    let debugCountdown = 7
+
+    function onClick(e) {
+      if (e.target === $experiments || $experiments.contains(/** @type {Node} */ (e.target))) {
+        debugCountdown--
+      } else {
+        debugCountdown = 7
+      }
+
+      if (debugCountdown == 0) {
+        document.body.classList.add('debug')
+        $debugCountdown.textContent = ''
+        $experiments.classList.remove('clickable')
+        $form.removeEventListener('click', onClick)
+      } else if (debugCountdown < 5) {
+        $debugCountdown.textContent = ` (${debugCountdown})`
+      }
+    }
+
+    $experiments.classList.add('clickable')
+    $form.addEventListener('click', onClick)
+  }
+})
 
