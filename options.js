@@ -1,9 +1,10 @@
-const mobile = navigator.userAgent.includes('Android')
+const mobile = /(Android|iPhone|iPad)/.test(navigator.userAgent)
 const desktop = !mobile
 const $body = document.body
 
 $body.classList.add(mobile ? 'mobile' : 'desktop')
 $body.classList.toggle('edge', navigator.userAgent.includes('Edg/'))
+$body.classList.toggle('safari', navigator.userAgent.includes('Safari/') && !/Chrom(e|ium)\//.test(navigator.userAgent))
 $body.querySelectorAll(mobile ? '.desktop' : '.mobile').forEach($el => $el.remove())
 
 /** @type {Map<string, string[]>} */

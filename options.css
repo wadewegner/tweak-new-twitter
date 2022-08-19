@@ -3,6 +3,7 @@ body, html {
   margin: 0;
   font-family: Roboto, "Segoe UI", Tahoma, sans-serif;
   font-size: 13px;
+  user-select: none;
 }
 
 body.mobile .desktop,
@@ -14,7 +15,8 @@ body:not(.hidingMetrics) .hidingMetrics,
 body:not(.hidingSidebarContent) .hidingSidebarContent,
 body:not(.home) .home,
 body:not(.mutedQuotes) .mutedQuotes,
-body:not(.uninvertedFollowButtons) .uninvertedFollowButtons {
+body:not(.uninvertedFollowButtons) .uninvertedFollowButtons,
+body:not(.mobile.safari) .toggle {
   display: none;
 }
 
@@ -26,6 +28,7 @@ body:not(.uninvertedFollowButtons) .uninvertedFollowButtons {
 label {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   padding: 4px 12px;
   margin: 8px 0;
   cursor: pointer;
@@ -63,6 +66,7 @@ select {
 
 input[type=checkbox] {
   margin-left: 12px;
+  flex: 0;
 }
 
 section.group > label:not(.checkbox) {
@@ -123,6 +127,102 @@ body.edge section.group > section > * {
   color: #767676;
 }
 
+/* Safari overrides (desktop) */
+body.desktop.safari label {
+  flex-direction: row-reverse;
+  justify-content: start;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+body.desktop.safari input[type=checkbox] {
+  margin-left: 0;
+  margin-right: 12px;
+}
+body.desktop.safari section.select label {
+  flex-direction: row;
+  justify-content: space-between;
+}
+body.desktop.safari section:not(.group):not(:first-of-type) {
+  border-top: none;
+}
+body.desktop.safari section.select label {
+  display: block;
+}
+body.desktop.safari section.select span::after {
+  content: ": ";
+  display: inline-block
+}
+body.desktop.safari section.checkbox > p {
+  margin-left: 2rem;
+}
+body.desktop.safari section.group > label {
+  margin-bottom: 0;
+}
+
+/* Safari overrides (mobile) */
+body.mobile.safari .checkbox input {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+body.mobile.safari .checkbox .toggle {
+  position: relative;
+  display: inline-block;
+  min-width: 46px;
+  height: 26px;
+  background-color: #e6e6e6;
+  border-radius: 23px;
+  vertical-align: text-bottom;
+  transition: all 0.3s linear;
+}
+body.mobile.safari .checkbox .toggle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 42px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
+  transition: all 0.25s linear;
+}
+body.mobile.safari .checkbox .toggle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
+  transform: translate3d(2px, 2px, 0);
+  transition: all 0.2s ease-in-out;
+}
+body.mobile.safari .checkbox label:active .toggle::after,
+body.mobile.safari label.checkbox:active .toggle:after {
+  width: 28px;
+  transform: translate3d(2px, 2px, 0);
+}
+body.mobile.safari .checkbox label:active input:checked + .toggle::after,
+body.mobile.safari label.checkbox:active input:checked + .toggle::after {
+  transform: translate3d(16px, 2px, 0);
+}
+body.mobile.safari input:checked + .toggle {
+  background-color: #4BD763;
+}
+body.mobile.safari input:checked + .toggle::before {
+  transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0);
+}
+body.mobile.safari input:checked + .toggle::after {
+  transform: translate3d(22px, 2px, 0);
+}
+body.mobile.safari .checkbox input:focus + .toggle {
+ outline: 5px auto Highlight;
+ outline: 5px auto -webkit-focus-ring-color;
+}
+
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   body {
@@ -162,5 +262,20 @@ body.edge section.group > section > * {
     section.group > section > * {
       color: rgb(191, 191, 201);
     }
+  }
+
+  /* Safari dark mode overrides */
+  body.safari {
+    background-color: rgb(28, 28, 28);
+    color: rgb(233, 233, 233);
+  }
+  body.safari section.group > section > * {
+    color: rgb(233, 233, 233);
+  }
+  body.mobile.safari .checkbox .toggle {
+    background-color: rgb(58, 58, 58);
+  }
+  body.mobile.safari .checkbox .toggle::before {
+    background-color: rgb(58, 58, 58);
   }
 }
